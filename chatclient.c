@@ -1,5 +1,5 @@
 
-/* ÁÄÌìÊÒ¿Í»§¶Ë³ÌĞò */
+/* èŠå¤©å®¤å®¢æˆ·ç«¯ç¨‹åº */
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
@@ -16,7 +16,7 @@
 
 #define QUIT_STRING "/end"
 
-/* ´òÓ¡ÁÄÌìÊÒÃûµ¥ */
+/* æ‰“å°èŠå¤©å®¤åå• */
 void showgroups(long lent, char *text) 
 {
 	char *tptr;
@@ -38,7 +38,7 @@ void showgroups(long lent, char *text)
 	}
 }
 
-/* ¼ÓÈëÁÄÌìÊÒ */
+/* åŠ å…¥èŠå¤©å®¤ */
 int joinagroup(int sock) {
 	
 	Packet * pkt;
@@ -48,10 +48,10 @@ int joinagroup(int sock) {
 	char * gname;
 	char * mname;
 
-	/* ÇëÇóÁÄÌìÊÒĞÅÏ¢ */
+	/* è¯·æ±‚èŠå¤©å®¤ä¿¡æ¯ */
 	sendpkt(sock, LIST_GROUPS, 0, NULL);
 
-	/* ½ÓÊÕÁÄÌìÊÒĞÅÏ¢»Ø¸´ */
+	/* æ¥æ”¶èŠå¤©å®¤ä¿¡æ¯å›å¤ */
 	pkt = recvpkt(sock);
 	if (!pkt) 
 	{
@@ -65,15 +65,15 @@ int joinagroup(int sock) {
 		exit(1);
 	}
 
-	/* ÏÔÊ¾ÁÄÌìÊÒ */
+	/* æ˜¾ç¤ºèŠå¤©å®¤ */
 	showgroups(pkt->lent, pkt->text);
 
-	/* ´Ó±ê×¼ÊäÈë¶ÁÈëÁÄÌìÊÒÃû */
+	/* ä»æ ‡å‡†è¾“å…¥è¯»å…¥èŠå¤©å®¤å */
 	printf("which group? ");
 	fgets(bufr, MAXPKTLEN, stdin);
 	bufr[strlen(bufr) - 1] = '\0';
 
-	/* ´ËÊ±¿ÉÄÜÓÃ»§ÏëÍË³ö */
+	/* æ­¤æ—¶å¯èƒ½ç”¨æˆ·æƒ³é€€å‡º */
 	if (strcmp(bufr, "") == 0
 			|| strncmp(bufr, QUIT_STRING, strlen(QUIT_STRING)) == 0)
 	{
@@ -82,12 +82,12 @@ int joinagroup(int sock) {
 	}
 	gname = strdup(bufr);
 
-	/* ¶ÁÈë³ÉÔ±Ãû×Ö */
+	/* è¯»å…¥æˆå‘˜åå­— */
 	printf("what nickname? ");
 	fgets(bufr, MAXPKTLEN, stdin);
 	bufr[strlen(bufr) - 1] = '\0';
 
-	/* ´ËÊ±¿ÉÄÜÓÃ»§ÏëÍË³ö */
+	/* æ­¤æ—¶å¯èƒ½ç”¨æˆ·æƒ³é€€å‡º */
 	if (strcmp(bufr, "") == 0
 			|| strncmp(bufr, QUIT_STRING, strlen(QUIT_STRING)) == 0) 
 	{
@@ -96,7 +96,7 @@ int joinagroup(int sock) {
 	}
 	mname = strdup(bufr);
 
-	/* ·¢ËÍ¼ÓÈëÁÄÌìÊÒµÄĞÅÏ¢ */
+	/* å‘é€åŠ å…¥èŠå¤©å®¤çš„ä¿¡æ¯ */
 	bufrptr = bufr;
 	strcpy(bufrptr, gname);
 	bufrptr += strlen(bufrptr) + 1;
@@ -105,7 +105,7 @@ int joinagroup(int sock) {
 	bufrlen = bufrptr - bufr;
 	sendpkt(sock, JOIN_GROUP, bufrlen, bufr);
 
-	/* ¶ÁÈ¡À´×Ô·şÎñÆ÷µÄ»Ø¸´ */
+	/* è¯»å–æ¥è‡ªæœåŠ¡å™¨çš„å›å¤ */
 	pkt = recvpkt(sock);
 	if (!pkt) 
 	{
@@ -118,7 +118,7 @@ int joinagroup(int sock) {
 		exit(1);
 	}
 
-	/* Èç¹û¾Ü¾øÏÔÊ¾ÆäÔ­Òò */
+	/* å¦‚æœæ‹’ç»æ˜¾ç¤ºå…¶åŸå›  */
 	if (pkt->type == JOIN_REJECTED)
 	{
 		printf("admin: %s\n", pkt->text);
@@ -126,7 +126,7 @@ int joinagroup(int sock) {
 		free(mname);
 		return (0);
 	}
-	else /* ³É¹¦¼ÓÈë */
+	else /* æˆåŠŸåŠ å…¥ */
 	{
 		printf("admin: joined '%s' as '%s'\n", gname, mname);
 		free(gname);
@@ -135,44 +135,44 @@ int joinagroup(int sock) {
 	}
 }
 
-/* Ö÷º¯ÊıÈë¿Ú */
+/* ä¸»å‡½æ•°å…¥å£ */
 main(int argc, char *argv[]) 
 {
 	int sock;
 
-	/* ÓÃ»§ÊäÈëºÏ·¨ĞÔ¼ì²â */
+	/* ç”¨æˆ·è¾“å…¥åˆæ³•æ€§æ£€æµ‹ */
 	if (argc != 1) 
 	{
 		fprintf(stderr, "usage : %s\n", argv[0]);
 		exit(1);
 	}
 
-	/* Óë·şÎñÆ÷Á¬½Ó */
+	/* ä¸æœåŠ¡å™¨è¿æ¥ */
 	sock = hooktoserver();
 	if (sock == -1)
 		exit(1);
 
-	fflush(stdout); /* Çå³ı±ê×¼Êä³ö»º³åÇø */
+	fflush(stdout); /* æ¸…é™¤æ ‡å‡†è¾“å‡ºç¼“å†²åŒº */
 
 	
-	/* ³õÊ¼»¯ÃèÊö·û¼¯ */
+	/* åˆå§‹åŒ–æè¿°ç¬¦é›† */
 	fd_set clientfds, tempfds;
 	FD_ZERO(&clientfds);
 	FD_ZERO(&tempfds);
-	FD_SET(sock, &clientfds); /* ÉèÖÃ·şÎñÆ÷Ì×½Ó×ÖÔÚ clientfds ÖĞµÄ±ÈÌØÎ» */
-	FD_SET(0, &clientfds); /* ÉèÖÃ±ê×¼ÊäÈëÔÚ clientfds ÖĞµÄ±ÈÌØÎ» */
+	FD_SET(sock, &clientfds); /* è®¾ç½®æœåŠ¡å™¨å¥—æ¥å­—åœ¨ clientfds ä¸­çš„æ¯”ç‰¹ä½ */
+	FD_SET(0, &clientfds); /* è®¾ç½®æ ‡å‡†è¾“å…¥åœ¨ clientfds ä¸­çš„æ¯”ç‰¹ä½ */
 
-	/* Ñ­»· */
+	/* å¾ªç¯ */
 	while (1) 
 	{
-		/* ¼ÓÈëÁÄÌìÊÒ */
+		/* åŠ å…¥èŠå¤©å®¤ */
 		if (!joinagroup(sock))
 			continue;
 
-		/* ±£³ÖÁÄÌì×´Ì¬ */
+		/* ä¿æŒèŠå¤©çŠ¶æ€ */
 		while (1) 
 		{
-			/* µ÷ÓÃ select º¯ÊıÍ¬Ê±¼à²â¼üÅÌºÍ·şÎñÆ÷ĞÅÏ¢ */
+			/* è°ƒç”¨ select å‡½æ•°åŒæ—¶ç›‘æµ‹é”®ç›˜å’ŒæœåŠ¡å™¨ä¿¡æ¯ */
 			tempfds = clientfds;
 
 			if (select(FD_SETSIZE, &tempfds, NULL, NULL, NULL) == -1) 
@@ -181,23 +181,23 @@ main(int argc, char *argv[])
 				exit(4);
 			}
 
-			/* ¶ÔÓÚËùÓĞÔÚ tempfds ÖĞ±»ÖÃÎ»µÄÎÄ¼şÃèÊö·û£¬¼ì²âËüÊÇ·ñÊÇÌ×½Ó×ÖÃèÊö·û£¬
-			Èç¹ûÊÇ£¬ÒâÎ¶·şÎñÆ÷´«À´ÏûÏ¢¡£Èç¹ûËüÎÄ¼şÃèÊö·ûÊÇ 0£¬ÔòÒâÎ¶ÓĞÀ´×ÔÓÃ»§
-			¼üÅÌµÄÊäÈëÒª·¢ËÍ¸ø·şÎñÆ÷ */
+			/* å¯¹äºæ‰€æœ‰åœ¨ tempfds ä¸­è¢«ç½®ä½çš„æ–‡ä»¶æè¿°ç¬¦ï¼Œæ£€æµ‹å®ƒæ˜¯å¦æ˜¯å¥—æ¥å­—æè¿°ç¬¦ï¼Œ
+			å¦‚æœæ˜¯ï¼Œæ„å‘³æœåŠ¡å™¨ä¼ æ¥æ¶ˆæ¯ã€‚å¦‚æœå®ƒæ–‡ä»¶æè¿°ç¬¦æ˜¯ 0ï¼Œåˆ™æ„å‘³æœ‰æ¥è‡ªç”¨æˆ·
+			é”®ç›˜çš„è¾“å…¥è¦å‘é€ç»™æœåŠ¡å™¨ */
 
-			/* ´¦Àí·şÎñÆ÷´«À´ĞÅÏ¢ */
+			/* å¤„ç†æœåŠ¡å™¨ä¼ æ¥ä¿¡æ¯ */
 			if (FD_ISSET(sock,&tempfds)) 
 			{
 				Packet *pkt;
 				pkt = recvpkt(sock);
 				if (!pkt) 
 				{
-					/* ·şÎñÆ÷å´»ú */
+					/* æœåŠ¡å™¨å®•æœº */
 					fprintf(stderr, "error: server died\n");
 					exit(1);
 				}
 
-				/* ÏÔÊ¾ÏûÏ¢ÎÄ±¾ */
+				/* æ˜¾ç¤ºæ¶ˆæ¯æ–‡æœ¬ */
 				if (pkt->type != USER_TEXT) 
 				{
 					fprintf(stderr, "error: unexpected reply from server\n");
@@ -208,7 +208,7 @@ main(int argc, char *argv[])
 				freepkt(pkt);
 			}
 
-			/* ´¦Àí¼üÅÌÊäÈë */
+			/* å¤„ç†é”®ç›˜è¾“å…¥ */
 			if (FD_ISSET(0,&tempfds)) 
 			{
 				char bufr[MAXPKTLEN];
@@ -216,12 +216,12 @@ main(int argc, char *argv[])
 				fgets(bufr, MAXPKTLEN, stdin);
 				if (strncmp(bufr, QUIT_STRING, strlen(QUIT_STRING)) == 0) 
 				{
-					/* ÍË³öÁÄÌìÊÒ */
+					/* é€€å‡ºèŠå¤©å®¤ */
 					sendpkt(sock, LEAVE_GROUP, 0, NULL);
 					break;
 				}
 
-				/* ·¢ËÍÏûÏ¢ÎÄ±¾µ½·şÎñÆ÷ */
+				/* å‘é€æ¶ˆæ¯æ–‡æœ¬åˆ°æœåŠ¡å™¨ */
 				sendpkt(sock, USER_TEXT, strlen(bufr) + 1, bufr);
 			}
 

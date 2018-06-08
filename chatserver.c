@@ -1,4 +1,4 @@
-/* ÁÄÌìÊÒ·şÎñÆ÷¶Ë³ÌĞò */
+/* èŠå¤©å®¤æœåŠ¡å™¨ç«¯ç¨‹åº */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,51 +14,51 @@
 #include <signal.h>
 #include "common.h"
 
-/* ÁÄÌìÊÒ³ÉÔ±ĞÅÏ¢ */
+/* èŠå¤©å®¤æˆå‘˜ä¿¡æ¯ */
 typedef struct _member 
 {
-    /* ³ÉÔ±ĞÕÃû */
+    /* æˆå‘˜å§“å */
     char *name;
 
-    /* ³ÉÔ± socket ÃèÊö·û */
+    /* æˆå‘˜ socket æè¿°ç¬¦ */
     int sock;
 
-    /* ³ÉÔ±ËùÊôÁÄÌìÊÒ */
+    /* æˆå‘˜æ‰€å±èŠå¤©å®¤ */
     int grid;
 
-    /* ÏÂÒ»¸ö³ÉÔ± */
+    /* ä¸‹ä¸€ä¸ªæˆå‘˜ */
     struct _member *next;
 
-    /* Ç°Ò»¸ö³ÉÔ± */
+    /* å‰ä¸€ä¸ªæˆå‘˜ */
     struct _member *prev;
 
 } Member;
 
-/* ÁÄÌìÊÒĞÅÏ¢ */
+/* èŠå¤©å®¤ä¿¡æ¯ */
 typedef struct _group 
 {
-    /* ÁÄÌìÊÒÃû×Ö */
+    /* èŠå¤©å®¤åå­— */
     char *name;
 
-    /* ÁÄÌìÊÒ×î´óÈİÁ¿£¨ÈËÊı£© */
+    /* èŠå¤©å®¤æœ€å¤§å®¹é‡ï¼ˆäººæ•°ï¼‰ */
     int capa;
 
-    /* µ±Ç°Õ¼ÓĞÂÊ£¨ÈËÊı£© */
+    /* å½“å‰å æœ‰ç‡ï¼ˆäººæ•°ï¼‰ */
     int occu;
 
-    /* ¼ÇÂ¼ÁÄÌìÊÒÄÚËùÓĞ³ÉÔ±ĞÅÏ¢µÄÁ´±í */
+    /* è®°å½•èŠå¤©å®¤å†…æ‰€æœ‰æˆå‘˜ä¿¡æ¯çš„é“¾è¡¨ */
     struct _member *mems;
 
 } Group;
 
-/* ËùÓĞÁÄÌìÊÒµÄĞÅÏ¢±í */
+/* æ‰€æœ‰èŠå¤©å®¤çš„ä¿¡æ¯è¡¨ */
 Group *group;
 int ngroups;
 
-/* Í¨¹ıÁÄÌìÊÒÃû×ÖÕÒµ½ÁÄÌìÊÒ ID */
+/* é€šè¿‡èŠå¤©å®¤åå­—æ‰¾åˆ°èŠå¤©å®¤ ID */
 int findgroup(char *name)
 {
-    int grid; /* ÁÄÌìÊÒID */
+    int grid; /* èŠå¤©å®¤ID */
 
 	for (grid = 0; grid < ngroups; grid++)
 	{
@@ -68,17 +68,17 @@ int findgroup(char *name)
     return(-1);
 }
 
-/* Í¨¹ıÊÒ³ÉÔ±Ãû×ÖÕÒµ½ÊÒ³ÉÔ±µÄĞÅÏ¢ */
+/* é€šè¿‡å®¤æˆå‘˜åå­—æ‰¾åˆ°å®¤æˆå‘˜çš„ä¿¡æ¯ */
 Member *findmemberbyname(char *name)
 {
-    int grid; /* ÁÄÌìÊÒ ID */
+    int grid; /* èŠå¤©å®¤ ID */
 
-    /* ±éÀúÃ¿¸ö×é */
+    /* éå†æ¯ä¸ªç»„ */
     for (grid=0; grid < ngroups; grid++) 
 	{
         Member *memb;
 
-        /* ±éÀú¸Ä×éµÄËùÓĞ³ÉÔ± */
+        /* éå†æ”¹ç»„çš„æ‰€æœ‰æˆå‘˜ */
         for (memb = group[grid].mems; memb ; memb = memb->next)
 		{
             if (strcmp(memb->name, name) == 0)
@@ -88,17 +88,17 @@ Member *findmemberbyname(char *name)
     return(NULL);
 }
 
-/* Í¨¹ı socket ÃèÊö·ûÕÒµ½ÊÒ³ÉÔ±µÄĞÅÏ¢ */
+/* é€šè¿‡ socket æè¿°ç¬¦æ‰¾åˆ°å®¤æˆå‘˜çš„ä¿¡æ¯ */
 Member *findmemberbysock(int sock)
 {
-    int grid; /* ÁÄÌìÊÒID */
+    int grid; /* èŠå¤©å®¤ID */
 
-    /* ±éÀúËùÓĞµÄÁÄÌìÊÒ */
+    /* éå†æ‰€æœ‰çš„èŠå¤©å®¤ */
     for (grid=0; grid < ngroups; grid++) 
 	{
 		Member *memb;
 
-		/* ±éÀúËùÓĞµÄµ±Ç°ÁÄÌìÊÒ³ÉÔ± */
+		/* éå†æ‰€æœ‰çš„å½“å‰èŠå¤©å®¤æˆå‘˜ */
 		for (memb = group[grid].mems; memb; memb = memb->next)
 		{
 			if (memb->sock == sock)
@@ -108,93 +108,93 @@ Member *findmemberbysock(int sock)
     return(NULL);
 }
 
-/* ÍË³öÇ°µÄÇåÀí¹¤×÷ */
+/* é€€å‡ºå‰çš„æ¸…ç†å·¥ä½œ */
 void cleanup()
 {
   char linkname[MAXNAMELEN];
 
-  /* È¡ÏûÎÄ¼şÁ´½Ó */
+  /* å–æ¶ˆæ–‡ä»¶é“¾æ¥ */
   sprintf(linkname, "%s/%s", getenv("HOME"), PORTLINK);
   unlink(linkname);
   exit(0);
 }
 
-/* Ö÷º¯Êı³ÌĞò */
+/* ä¸»å‡½æ•°ç¨‹åº */
 main(int argc, char *argv[])
 {
-	int    servsock;   /* ÁÄÌìÊÒ·şÎñÆ÷¶Ë¼àÌı socket ÃèÊö·û */
-	int    maxsd;	     /* Á¬½ÓµÄ¿Í»§¶Ë socket ÃèÊö·ûµÄ×î´óÖµ */
-	fd_set livesdset, tempset; /* ¿Í»§¶Ë sockets ÃèÊö·û¼¯ */
+	int    servsock;   /* èŠå¤©å®¤æœåŠ¡å™¨ç«¯ç›‘å¬ socket æè¿°ç¬¦ */
+	int    maxsd;	     /* è¿æ¥çš„å®¢æˆ·ç«¯ socket æè¿°ç¬¦çš„æœ€å¤§å€¼ */
+	fd_set livesdset, tempset; /* å®¢æˆ·ç«¯ sockets æè¿°ç¬¦é›† */
 
 
-	/* ÓÃ»§ÊäÈëºÏ·¨ĞÔ¼ì²â */
+	/* ç”¨æˆ·è¾“å…¥åˆæ³•æ€§æ£€æµ‹ */
 	if (argc != 2) 
 		{
 			fprintf(stderr, "usage : %s <groups-file>\n", argv[0]);
 			exit(1);
 		}
 
-	/* µ÷ÓÃ initgroups º¯Êı£¬³õÊ¼»¯ÁÄÌìÊÒĞÅÏ¢ */
+	/* è°ƒç”¨ initgroups å‡½æ•°ï¼Œåˆå§‹åŒ–èŠå¤©å®¤ä¿¡æ¯ */
 	if (!initgroups(argv[1]))
 		exit(1);
 
-	/* ÉèÖÃĞÅºÅ´¦Àíº¯Êı */
+	/* è®¾ç½®ä¿¡å·å¤„ç†å‡½æ•° */
 	signal(SIGTERM, cleanup);
 	signal(SIGINT, cleanup);
 
-	/* ×¼±¸½ÓÊÜÇëÇó */
-	servsock = startserver(); /* ¶¨ÒåÔÚ "chatlinker.c" ÎÄ¼şÖĞ£¬
-							Ö÷ÒªÍê³É´´½¨·şÎñÆ÷Ì×½Ó×Ö£¬°ó¶¨¶Ë¿ÚºÅ£¬
-							²¢ÉèÖÃ°ÑÌ×½Ó×ÖÎª¼àÌı×´Ì¬ */
+	/* å‡†å¤‡æ¥å—è¯·æ±‚ */
+	servsock = startserver(); /* å®šä¹‰åœ¨ "chatlinker.c" æ–‡ä»¶ä¸­ï¼Œ
+							ä¸»è¦å®Œæˆåˆ›å»ºæœåŠ¡å™¨å¥—æ¥å­—ï¼Œç»‘å®šç«¯å£å·ï¼Œ
+							å¹¶è®¾ç½®æŠŠå¥—æ¥å­—ä¸ºç›‘å¬çŠ¶æ€ */
 	if (servsock == -1)
 		exit(1);
 
-	/* ³õÊ¼»¯ maxsd */
+	/* åˆå§‹åŒ– maxsd */
 	maxsd = servsock;
 
-	/* ³õÊ¼»¯ÃèÊö·û¼¯ */
-	FD_ZERO(&livesdset); /* ÇåÀí livesdset µÄËùÓĞµÄ±ÈÌØÎ»*/
-	FD_ZERO(&tempset);  /* ÇåÀí tempset µÄËùÓĞµÄ±ÈÌØÎ» */
-	FD_SET(servsock, &livesdset); /* ´ò¿ª·şÎñÆ÷¼àÌıÌ×½Ó×ÖµÄÌ×½Ó×Ö
-								  ÃèÊö·û servsock ¶ÔÓ¦µÄfd_set ±ÈÌØÎ» */
+	/* åˆå§‹åŒ–æè¿°ç¬¦é›† */
+	FD_ZERO(&livesdset); /* æ¸…ç† livesdset çš„æ‰€æœ‰çš„æ¯”ç‰¹ä½*/
+	FD_ZERO(&tempset);  /* æ¸…ç† tempset çš„æ‰€æœ‰çš„æ¯”ç‰¹ä½ */
+	FD_SET(servsock, &livesdset); /* æ‰“å¼€æœåŠ¡å™¨ç›‘å¬å¥—æ¥å­—çš„å¥—æ¥å­—
+								  æè¿°ç¬¦ servsock å¯¹åº”çš„fd_set æ¯”ç‰¹ä½ */
 
-	/* ½ÓÊÜ²¢´¦ÀíÀ´×Ô¿Í»§¶ËµÄÇëÇó */
+	/* æ¥å—å¹¶å¤„ç†æ¥è‡ªå®¢æˆ·ç«¯çš„è¯·æ±‚ */
 	while (1) 
 		{
-			int sock;    /* Ñ­»·±äÁ¿ */
+			int sock;    /* å¾ªç¯å˜é‡ */
 
-			/* ÌØ±ğ×¢Òâ tempset ×÷Îª select ²ÎÊıÊ±ÊÇÒ»¸ö "Öµ-½á¹û" ²ÎÊı£¬
-			select º¯Êı·µ»ØÊ±£¬tempset ÖĞ´ò¿ªµÄ±ÈÌØÎ»Ö»ÊÇ¶Á¾ÍĞ÷µÄ socket
-			ÃèÊö·û£¬ËùÒÔÎÒÃÇÃ¿´ÎÑ­»·¶¼Òª½«Æä¸üĞÂÎªÎÒÃÇĞèÒªÄÚºË²âÊÔ¶Á¾ÍĞ÷Ìõ¼ş
-			µÄ socket ÃèÊö·û¼¯ºÏ livesdset */
+			/* ç‰¹åˆ«æ³¨æ„ tempset ä½œä¸º select å‚æ•°æ—¶æ˜¯ä¸€ä¸ª "å€¼-ç»“æœ" å‚æ•°ï¼Œ
+			select å‡½æ•°è¿”å›æ—¶ï¼Œtempset ä¸­æ‰“å¼€çš„æ¯”ç‰¹ä½åªæ˜¯è¯»å°±ç»ªçš„ socket
+			æè¿°ç¬¦ï¼Œæ‰€ä»¥æˆ‘ä»¬æ¯æ¬¡å¾ªç¯éƒ½è¦å°†å…¶æ›´æ–°ä¸ºæˆ‘ä»¬éœ€è¦å†…æ ¸æµ‹è¯•è¯»å°±ç»ªæ¡ä»¶
+			çš„ socket æè¿°ç¬¦é›†åˆ livesdset */
 			tempset = livesdset; 
 
 		
-			/* µ÷ÓÃ select º¯ÊıµÈ´ıÒÑÁ¬½ÓÌ×½Ó×ÖÉÏµÄ°üºÍÀ´×Ô
-			ĞÂµÄÌ×½Ó×ÖµÄÁ´½ÓÇëÇó */
+			/* è°ƒç”¨ select å‡½æ•°ç­‰å¾…å·²è¿æ¥å¥—æ¥å­—ä¸Šçš„åŒ…å’Œæ¥è‡ª
+			æ–°çš„å¥—æ¥å­—çš„é“¾æ¥è¯·æ±‚ */
 			select(maxsd + 1, &tempset, NULL, NULL, NULL);
 
-			/* Ñ­»·²éÕÒÀ´×Ô¿Í»§»úµÄÇëÇó */
+			/* å¾ªç¯æŸ¥æ‰¾æ¥è‡ªå®¢æˆ·æœºçš„è¯·æ±‚ */
 			for (sock=3; sock <= maxsd; sock++)
 				{
-					/* Èç¹ûÊÇ·şÎñÆ÷¼àÌı socket£¬ÔòÌø³ö½ÓÊÕÊı¾İ°ü»·½Ú£¬Ö´ĞĞ½ÓÊÜÁ¬½Ó */
+					/* å¦‚æœæ˜¯æœåŠ¡å™¨ç›‘å¬ socketï¼Œåˆ™è·³å‡ºæ¥æ”¶æ•°æ®åŒ…ç¯èŠ‚ï¼Œæ‰§è¡Œæ¥å—è¿æ¥ */
 					if (sock == servsock)
 						continue;
 
-					/* ÓĞÀ´×Ô¿Í»§ socket µÄÏûÏ¢ */
+					/* æœ‰æ¥è‡ªå®¢æˆ· socket çš„æ¶ˆæ¯ */
 					if(FD_ISSET(sock, &tempset))
 					{
 						Packet *pkt;
 
-						/* ¶ÁÏûÏ¢ */
-						pkt = recvpkt(sock); /* º¯Êı recvpkt ¶¨ÒåÔÚ"chatlinker.c" */
+						/* è¯»æ¶ˆæ¯ */
+						pkt = recvpkt(sock); /* å‡½æ•° recvpkt å®šä¹‰åœ¨"chatlinker.c" */
 
 						if (!pkt)
 							{
-								/* ¿Í»§»ú¶Ï¿ªÁËÁ¬½Ó */
+								/* å®¢æˆ·æœºæ–­å¼€äº†è¿æ¥ */
 								char *clientname;  /* host name of the client */
 
-								/* Ê¹ÓÃ gethostbyaddr£¬getpeername º¯ÊıµÃµ½ client µÄÖ÷»úÃû */
+								/* ä½¿ç”¨ gethostbyaddrï¼Œgetpeername å‡½æ•°å¾—åˆ° client çš„ä¸»æœºå */
 								socklen_t len;
 								struct sockaddr_in addr;
 								len = sizeof(addr);
@@ -211,13 +211,13 @@ main(int argc, char *argv[])
 								printf("admin: disconnect from '%s' at '%d'\n",
 									clientname, sock);
 
-								/* ´ÓÁÄÌìÊÒÉ¾³ı¸Ã³ÉÔ± */
+								/* ä»èŠå¤©å®¤åˆ é™¤è¯¥æˆå‘˜ */
 								leavegroup(sock);
 
-								/* ¹Ø±ÕÌ×½Ó×Ö */
+								/* å…³é—­å¥—æ¥å­— */
 								close(sock);
 
-								/* Çå³ıÌ×½Ó×ÖÃèÊö·ûÔÚ livesdset ÖĞµÄ±ÈÌØÎ» */
+								/* æ¸…é™¤å¥—æ¥å­—æè¿°ç¬¦åœ¨ livesdset ä¸­çš„æ¯”ç‰¹ä½ */
 								FD_CLR(sock, &livesdset);
 
 							} 
@@ -225,7 +225,7 @@ main(int argc, char *argv[])
 							{
 								char *gname, *mname;
 
-								/* »ùÓÚÏûÏ¢ÀàĞÍ²ÉÈ¡ĞĞ¶¯ */
+								/* åŸºäºæ¶ˆæ¯ç±»å‹é‡‡å–è¡ŒåŠ¨ */
 								switch (pkt->type) 
 								{
 									case LIST_GROUPS :
@@ -244,30 +244,30 @@ main(int argc, char *argv[])
 										break;
 								}
 
-								/* ÊÍ·Å°ü½á¹¹ */
+								/* é‡Šæ”¾åŒ…ç»“æ„ */
 								freepkt(pkt);
 							}
 					}
 				}
 
-			struct sockaddr_in remoteaddr; /* ¿Í»§»úµØÖ·½á¹¹ */
+			struct sockaddr_in remoteaddr; /* å®¢æˆ·æœºåœ°å€ç»“æ„ */
 			socklen_t addrlen;
 
-			/* ÓĞÀ´×ÔĞÂµÄ¿Í»§»úµÄÁ¬½ÓÇëÇóÇëÇó */
+			/* æœ‰æ¥è‡ªæ–°çš„å®¢æˆ·æœºçš„è¿æ¥è¯·æ±‚è¯·æ±‚ */
 			if(FD_ISSET(servsock, &tempset))
 			{
-				int  csd; /* ÒÑÁ¬½ÓµÄ socket ÃèÊö·û */
+				int  csd; /* å·²è¿æ¥çš„ socket æè¿°ç¬¦ */
 
-				/* ½ÓÊÜÒ»¸öĞÂµÄÁ¬½ÓÇëÇó */
+				/* æ¥å—ä¸€ä¸ªæ–°çš„è¿æ¥è¯·æ±‚ */
 				addrlen = sizeof remoteaddr;
 				csd = accept(servsock, (struct sockaddr *) &remoteaddr, &addrlen);
 
-				/* Èç¹ûÁ¬½Ó³É¹¦ */
+				/* å¦‚æœè¿æ¥æˆåŠŸ */
 				if (csd != -1) 
 					{
 						char *clientname;
 
-						/* Ê¹ÓÃ gethostbyaddr º¯ÊıµÃµ½ client µÄÖ÷»úÃû */
+						/* ä½¿ç”¨ gethostbyaddr å‡½æ•°å¾—åˆ° client çš„ä¸»æœºå */
 						struct hostent *h;
 						h = gethostbyaddr((char *)&remoteaddr.sin_addr.s_addr,
 							sizeof(struct in_addr), AF_INET);
@@ -277,14 +277,14 @@ main(int argc, char *argv[])
 						else
 							printf("gethostbyaddr failed\n");
 
-						/* ÏÔÊ¾¿Í»§»úµÄÖ÷»úÃûºÍ¶ÔÓ¦µÄ socket ÃèÊö·û */
+						/* æ˜¾ç¤ºå®¢æˆ·æœºçš„ä¸»æœºåå’Œå¯¹åº”çš„ socket æè¿°ç¬¦ */
 						printf("admin: connect from '%s' at '%d'\n",
 							clientname, csd);
 
-						/* ½«¸ÃÁ¬½ÓµÄÌ×½Ó×ÖÃèÊö·û csd ¼ÓÈëlivesdset */
+						/* å°†è¯¥è¿æ¥çš„å¥—æ¥å­—æè¿°ç¬¦ csd åŠ å…¥livesdset */
 						FD_SET(csd, &livesdset);
 
-						/* ±£³Ö maxsd ¼ÇÂ¼µÄÊÇ×î´óµÄÌ×½Ó×ÖÃèÊö·û */
+						/* ä¿æŒ maxsd è®°å½•çš„æ˜¯æœ€å¤§çš„å¥—æ¥å­—æè¿°ç¬¦ */
 						if (csd > maxsd)
 							maxsd = csd;
 					}
@@ -297,7 +297,7 @@ main(int argc, char *argv[])
 		}
 }
 
-/* ³õÊ¼»¯ÁÄÌìÊÒÁ´±í */
+/* åˆå§‹åŒ–èŠå¤©å®¤é“¾è¡¨ */
 int initgroups(char *groupsfile)
 {
 	FILE *fp;
@@ -305,7 +305,7 @@ int initgroups(char *groupsfile)
 	int capa;
 	int grid;
 
-	/* ´ò¿ª´æ´¢ÁÄÌìÊÒĞÅÏ¢µÄÅäÖÃÎÄ¼ş */
+	/* æ‰“å¼€å­˜å‚¨èŠå¤©å®¤ä¿¡æ¯çš„é…ç½®æ–‡ä»¶ */
 	fp = fopen(groupsfile, "r");
 	if (!fp) 
 	{
@@ -313,10 +313,10 @@ int initgroups(char *groupsfile)
 		return(0);
     }
 
-	/* ´ÓÅäÖÃÎÄ¼şÖĞ¶ÁÈ¡ÁÄÌìÊÒµÄÊıÁ¿ */
+	/* ä»é…ç½®æ–‡ä»¶ä¸­è¯»å–èŠå¤©å®¤çš„æ•°é‡ */
 	fscanf(fp, "%d", &ngroups);
 
-	/* ÎªËùÓĞµÄÁÄÌìÊÒ·ÖÅäÄÚ´æ¿Õ¼ä */
+	/* ä¸ºæ‰€æœ‰çš„èŠå¤©å®¤åˆ†é…å†…å­˜ç©ºé—´ */
 	group = (Group *) calloc(ngroups, sizeof(Group));
     if (!group) 
 	{
@@ -324,17 +324,17 @@ int initgroups(char *groupsfile)
 		return(0);
     }
 
-	/* ´ÓÅäÖÃÎÄ¼ş¶ÁÈ¡ÁÄÌìÊÒĞÅÏ¢ */
+	/* ä»é…ç½®æ–‡ä»¶è¯»å–èŠå¤©å®¤ä¿¡æ¯ */
 	for (grid =0; grid < ngroups; grid++) 
 	{
-		/* ¶ÁÈ¡ÁÄÌìÊÒÃûºÍÈİÁ¿ */
+		/* è¯»å–èŠå¤©å®¤åå’Œå®¹é‡ */
 		if (fscanf(fp, "%s %d", name, &capa) != 2)
 		{
 			fprintf(stderr, "error : no info on group %d\n", grid + 1);
 			return(0);
 		}
 
-    /* ½«ĞÅÏ¢´æ½ø group ½á¹¹ */
+    /* å°†ä¿¡æ¯å­˜è¿› group ç»“æ„ */
 		group[grid].name = strdup(name);
 		group[grid].capa = capa;
 		group[grid].occu = 0;
@@ -343,7 +343,7 @@ int initgroups(char *groupsfile)
 	return(1);
 }
 
-/* °ÑËùÓĞÁÄÌìÊÒµÄĞÅÏ¢·¢¸ø¿Í»§¶Ë */
+/* æŠŠæ‰€æœ‰èŠå¤©å®¤çš„ä¿¡æ¯å‘ç»™å®¢æˆ·ç«¯ */
 int listgroups(int sock)
 {
 	int      grid;
@@ -351,64 +351,64 @@ int listgroups(int sock)
 	char *   bufrptr;
 	long     bufrlen;
 
-	/* Ã¿Ò»¿éĞÅÏ¢ÔÚ×Ö·û´®ÖĞÓÃ NULL ·Ö¸î */
+	/* æ¯ä¸€å—ä¿¡æ¯åœ¨å­—ç¬¦ä¸²ä¸­ç”¨ NULL åˆ†å‰² */
 	bufrptr = pktbufr;
 	for (grid=0; grid < ngroups; grid++) 
 	{
-		/* »ñÈ¡ÁÄÌìÊÒÃû×Ö */
+		/* è·å–èŠå¤©å®¤åå­— */
 		sprintf(bufrptr, "%s", group[grid].name);
 		bufrptr += strlen(bufrptr) + 1;
 
-		/* »ñÈ¡ÁÄÌìÊÒÈİÁ¿ */
+		/* è·å–èŠå¤©å®¤å®¹é‡ */
 		sprintf(bufrptr, "%d", group[grid].capa);
 		bufrptr += strlen(bufrptr) + 1;
 
-		/* »ñÈ¡ÁÄÌìÊÒÕ¼ÓĞÂÊ */
+		/* è·å–èŠå¤©å®¤å æœ‰ç‡ */
 		sprintf(bufrptr, "%d", group[grid].occu);
 		bufrptr += strlen(bufrptr) + 1;
     }
 	bufrlen = bufrptr - pktbufr;
 
-	/* ·¢ËÍÏûÏ¢¸ø»Ø¸´¿Í»§»úµÄÇëÇó */
+	/* å‘é€æ¶ˆæ¯ç»™å›å¤å®¢æˆ·æœºçš„è¯·æ±‚ */
 	sendpkt(sock, LIST_GROUPS, bufrlen, pktbufr);
 	return(1);
 }
 
-/* ¼ÓÈëÁÄÌìÊÒ */
+/* åŠ å…¥èŠå¤©å®¤ */
 int joingroup(int sock, char *gname, char *mname)
 {
 	int       grid;
 	Member *  memb;
 
-	/* ¸ù¾İÁÄÌìÊÒÃû»ñµÃÁÄÌìÊÒ ID */
+	/* æ ¹æ®èŠå¤©å®¤åè·å¾—èŠå¤©å®¤ ID */
 	grid = findgroup(gname);
 	if (grid == -1) 
 	{
 		char *errmsg = "no such group";
-		sendpkt(sock, JOIN_REJECTED, strlen(errmsg), errmsg); /* ·¢ËÍ¾Ü¾ø¼ÓÈëÏûÏ¢ */
+		sendpkt(sock, JOIN_REJECTED, strlen(errmsg), errmsg); /* å‘é€æ‹’ç»åŠ å…¥æ¶ˆæ¯ */
 		return(0);
     }
 
-	/* ¼ì²éÊÇ·ñÁÄÌìÊÒ³ÉÔ±Ãû×ÖÒÑ±»Õ¼ÓÃ */
+	/* æ£€æŸ¥æ˜¯å¦èŠå¤©å®¤æˆå‘˜åå­—å·²è¢«å ç”¨ */
 	memb = findmemberbyname(mname);
 
-	/* Èç¹ûÁÄÌìÊÒ³ÉÔ±ÃûÒÑ´æÔÚ£¬Ôò·µ»Ø´íÎóÏûÏ¢ */
+	/* å¦‚æœèŠå¤©å®¤æˆå‘˜åå·²å­˜åœ¨ï¼Œåˆ™è¿”å›é”™è¯¯æ¶ˆæ¯ */
 	if (memb) 
 	{
 		char *errmsg = "member name already exists";
-		sendpkt(sock, JOIN_REJECTED, strlen(errmsg), errmsg); /* ·¢ËÍ¾Ü¾ø¼ÓÈëÏûÏ¢ */
+		sendpkt(sock, JOIN_REJECTED, strlen(errmsg), errmsg); /* å‘é€æ‹’ç»åŠ å…¥æ¶ˆæ¯ */
 		return(0);
     }
 
-	/* ¼ì²éÁÄÌìÊÒÊÇ·ñÒÑÂú */
+	/* æ£€æŸ¥èŠå¤©å®¤æ˜¯å¦å·²æ»¡ */
 	if (group[grid].capa == group[grid].occu) 
 	{
 		char *errmsg = "room is full";
-		sendpkt(sock, JOIN_REJECTED, strlen(errmsg), errmsg); /* ·¢ËÍ¾Ü¾ø¼ÓÈëÏûÏ¢ */
+		sendpkt(sock, JOIN_REJECTED, strlen(errmsg), errmsg); /* å‘é€æ‹’ç»åŠ å…¥æ¶ˆæ¯ */
 		return(0);
 	}
 
-	/* ÎªÁÄÌìÊÒĞÂ³ÉÔ±ÉêÇëÄÚ´æ¿Õ¼äÀ´´æ´¢³ÉÔ±ĞÅÏ¢ */
+	/* ä¸ºèŠå¤©å®¤æ–°æˆå‘˜ç”³è¯·å†…å­˜ç©ºé—´æ¥å­˜å‚¨æˆå‘˜ä¿¡æ¯ */
 	memb = (Member *) calloc(1, sizeof(Member));
 	if (!memb) 
 	{
@@ -427,47 +427,47 @@ int joingroup(int sock, char *gname, char *mname)
 	group[grid].mems = memb;
 	printf("admin: '%s' joined '%s'\n", mname, gname);
 
-	/* ¸üĞÂÁÄÌìÊÒµÄÔÚÏßÈËÊı */
+	/* æ›´æ–°èŠå¤©å®¤çš„åœ¨çº¿äººæ•° */
 	group[grid].occu++;
 
-	sendpkt(sock, JOIN_ACCEPTED, 0, NULL); /* ·¢ËÍ½ÓÊÜ³ÉÔ±ÏûÏ¢ */
+	sendpkt(sock, JOIN_ACCEPTED, 0, NULL); /* å‘é€æ¥å—æˆå‘˜æ¶ˆæ¯ */
 	return(1);
 }
 
-/* Àë¿ªÁÄÌìÊÒ */
+/* ç¦»å¼€èŠå¤©å®¤ */
 int leavegroup(int sock)
 {
 	Member *memb;
 
-	/* µÃµ½ÁÄÌìÊÒ³ÉÔ±ĞÅÏ¢ */
+	/* å¾—åˆ°èŠå¤©å®¤æˆå‘˜ä¿¡æ¯ */
 	memb = findmemberbysock(sock);
 	if (!memb) 
 		return(0);
 
-	/* ´ÓÁÄÌìÊÒĞÅÏ¢½á¹¹ÖĞÉ¾³ı memb ³ÉÔ± */
+	/* ä»èŠå¤©å®¤ä¿¡æ¯ç»“æ„ä¸­åˆ é™¤ memb æˆå‘˜ */
 	if (memb->next) 
-		memb->next->prev = memb->prev; /* ÔÚÁÄÌìÊÒ³ÉÔ±Á´±íµÄÎ²²¿ */
+		memb->next->prev = memb->prev; /* åœ¨èŠå¤©å®¤æˆå‘˜é“¾è¡¨çš„å°¾éƒ¨ */
 
 	/* remove from ... */
-	if (group[memb->grid].mems == memb) /* ÔÚÁÄÌìÊÒ³ÉÔ±Á´±íµÄÍ·²¿ */
+	if (group[memb->grid].mems == memb) /* åœ¨èŠå¤©å®¤æˆå‘˜é“¾è¡¨çš„å¤´éƒ¨ */
 		group[memb->grid].mems = memb->next;
 
 	else 
-		memb->prev->next = memb->next; /* ÔÚÁÄÌìÊÒ³ÉÔ±Á´±íµÄÖĞ²¿ */
+		memb->prev->next = memb->next; /* åœ¨èŠå¤©å®¤æˆå‘˜é“¾è¡¨çš„ä¸­éƒ¨ */
 	
 	printf("admin: '%s' left '%s'\n",
 		memb->name, group[memb->grid].name);
 
-	/* ¸üĞÂÁÄÌìÊÒµÄÕ¼ÓĞÂÊ */
+	/* æ›´æ–°èŠå¤©å®¤çš„å æœ‰ç‡ */
 	group[memb->grid].occu--;
 
-	/* ÊÍ·ÅÄÚ´æ */
+	/* é‡Šæ”¾å†…å­˜ */
 	free(memb->name);
 	free(memb);
 	return(1);
 }
 
-/* °Ñ³ÉÔ±µÄÏûÏ¢·¢ËÍ¸øÆäËûÁÄÌìÊÒ³ÉÔ± */
+/* æŠŠæˆå‘˜çš„æ¶ˆæ¯å‘é€ç»™å…¶ä»–èŠå¤©å®¤æˆå‘˜ */
 int relaymsg(int sock, char *text)
 {
 	Member *memb;
@@ -476,7 +476,7 @@ int relaymsg(int sock, char *text)
 	char *bufrptr;
 	long bufrlen;
 
-	/* ¸ù¾İ socket ÃèÊö·û»ñµÃ¸ÃÁÄÌìÊÒ³ÉÔ±µÄĞÅÏ¢ */
+	/* æ ¹æ® socket æè¿°ç¬¦è·å¾—è¯¥èŠå¤©å®¤æˆå‘˜çš„ä¿¡æ¯ */
 	sender = findmemberbysock(sock);
 	if (!sender)
 	{
@@ -484,7 +484,7 @@ int relaymsg(int sock, char *text)
 		return(0);
 	}
 
-	/* °Ñ·¢ËÍÕßµÄĞÕÃûÌí¼Óµ½ÏûÏ¢ÎÄ±¾Ç°±ß */
+	/* æŠŠå‘é€è€…çš„å§“åæ·»åŠ åˆ°æ¶ˆæ¯æ–‡æœ¬å‰è¾¹ */
 	bufrptr = pktbufr;
 	strcpy(bufrptr,sender->name);
 	bufrptr += strlen(bufrptr) + 1;
@@ -492,13 +492,13 @@ int relaymsg(int sock, char *text)
 	bufrptr += strlen(bufrptr) + 1;
 	bufrlen = bufrptr - pktbufr;
 
-	/* ¹ã²¥¸ÃÏûÏ¢¸ø¸Ã³ÉÔ±ËùÔÚÁÄÌìÊÒµÄÆäËû³ÉÔ± */
+	/* å¹¿æ’­è¯¥æ¶ˆæ¯ç»™è¯¥æˆå‘˜æ‰€åœ¨èŠå¤©å®¤çš„å…¶ä»–æˆå‘˜ */
 	for (memb = group[sender->grid].mems; memb; memb = memb->next)
 	{
-		/* Ìø¹ı·¢ËÍÕß */
+		/* è·³è¿‡å‘é€è€… */
 		if (memb->sock == sock) 
 			continue;
-		sendpkt(memb->sock, USER_TEXT, bufrlen, pktbufr); /* ¸øÁÄÌìÊÒÆäËû³ÉÔ±  ·¢ËÍÏûÏ¢£¨TCPÊÇÈ«Ë«¹¤µÄ£© */
+		sendpkt(memb->sock, USER_TEXT, bufrlen, pktbufr); /* ç»™èŠå¤©å®¤å…¶ä»–æˆå‘˜  å‘é€æ¶ˆæ¯ï¼ˆTCPæ˜¯å…¨åŒå·¥çš„ï¼‰ */
 	}
 	printf("%s: %s", sender->name, text);
 	return(1);

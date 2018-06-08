@@ -1,12 +1,12 @@
 /*--------------------------------------------------------------------*/
-/* ·şÎñÆ÷¶Ë¿ÚĞÅÏ¢ */
+/* æœåŠ¡å™¨ç«¯å£ä¿¡æ¯ */
 #define PORTLINK ".chatport"
 
-/* »º´æÏŞÖÆ */
+/* ç¼“å­˜é™åˆ¶ */
 #define MAXNAMELEN 256
 #define MAXPKTLEN  2048
 
-/* ĞÅÏ¢ÀàĞÍµÄ¶¨Òå */
+/* ä¿¡æ¯ç±»å‹çš„å®šä¹‰ */
 #define LIST_GROUPS    0
 #define JOIN_GROUP     1
 #define LEAVE_GROUP    2
@@ -14,16 +14,16 @@
 #define JOIN_REJECTED  4
 #define JOIN_ACCEPTED  5
 
-/* Êı¾İ°ü½á¹¹ */
+/* æ•°æ®åŒ…ç»“æ„ */
 typedef struct _packet {
 
-  /* Êı¾İ°üÀàĞÍ */
+  /* æ•°æ®åŒ…ç±»å‹ */
   char      type;
 
-  /* Êı¾İ°üÄÚÈİ³¤¶È */
+  /* æ•°æ®åŒ…å†…å®¹é•¿åº¦ */
   long      lent;
 
-  /* Êı¾İ°üÄÚÈİ */
+  /* æ•°æ®åŒ…å†…å®¹ */
   char *    text;
 
 } Packet;

@@ -1,4 +1,4 @@
-/* Á¬½Ó·þÎñÆ÷ºÍ¿Í»§»úµÄº¯Êý */
+/* è¿žæŽ¥æœåŠ¡å™¨å’Œå®¢æˆ·æœºçš„å‡½æ•° */
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -15,42 +15,42 @@
 #include "common.h"
 
 /*
-  Îª·þÎñÆ÷½ÓÊÕ¿Í»§¶ËÇëÇó×ö×¼±¸£¬
-  ÕýÈ··µ»Ø socket ÎÄ¼þÃèÊö·û
-  ´íÎó·µ»Ø -1
+  ä¸ºæœåŠ¡å™¨æŽ¥æ”¶å®¢æˆ·ç«¯è¯·æ±‚åšå‡†å¤‡ï¼Œ
+  æ­£ç¡®è¿”å›ž socket æ–‡ä»¶æè¿°ç¬¦
+  é”™è¯¯è¿”å›ž -1
 */
 int startserver()
 {
-  int     sd;      /* socket ÃèÊö·û */
-  int     myport;  /* ·þÎñÆ÷¶Ë¿Ú */
-  const char *  myname;  /* ±¾µØÖ÷»úµÄÈ«³Æ */
+  int     sd;      /* socket æè¿°ç¬¦ */
+  int     myport;  /* æœåŠ¡å™¨ç«¯å£ */
+  const char *  myname;  /* æœ¬åœ°ä¸»æœºçš„å…¨ç§° */
 
   char 	  linktrgt[MAXNAMELEN];
   char 	  linkname[MAXNAMELEN];
 
   /*
-	µ÷ÓÃ socket º¯Êý´´½¨ TCP socket ÃèÊö·û
+	è°ƒç”¨ socket å‡½æ•°åˆ›å»º TCP socket æè¿°ç¬¦
   */
   sd = socket(PF_INET, SOCK_STREAM, 0);
 
   /*
-    µ÷ÓÃbindº¯Êý½«Ò»¸ö±¾µØµØÖ·Ö¸ÅÉ¸ø socket
+    è°ƒç”¨bindå‡½æ•°å°†ä¸€ä¸ªæœ¬åœ°åœ°å€æŒ‡æ´¾ç»™ socket
   */
 
   struct sockaddr_in server_address;
   server_address.sin_family = AF_INET;
-  server_address.sin_addr.s_addr = htonl(INADDR_ANY); /* Í¨ÅäµØÖ· INADDR_ANY ±íÊ¾IPµØÖ·Îª 0.0.0.0£¬
-													  ÄÚºËÔÚÌ×½Ó×Ö±»Á¬½ÓºóÑ¡ÔñÒ»¸ö±¾µØµØÖ·
-													  htonlº¯Êý ÓÃÓÚ½« INADDR_ANY ×ª»»ÎªÍøÂç×Ö½ÚÐò */
-  server_address.sin_port = htons(0);  /* Ö¸ÅÉÎªÍ¨Åä¶Ë¿Ú 0£¬µ÷ÓÃ bind º¯ÊýºóÄÚºË½«ÈÎÒâÑ¡ÔñÒ»¸öÁÙÊ±¶Ë¿Ú */
+  server_address.sin_addr.s_addr = htonl(INADDR_ANY); /* é€šé…åœ°å€ INADDR_ANY è¡¨ç¤ºIPåœ°å€ä¸º 0.0.0.0ï¼Œ
+													  å†…æ ¸åœ¨å¥—æŽ¥å­—è¢«è¿žæŽ¥åŽé€‰æ‹©ä¸€ä¸ªæœ¬åœ°åœ°å€
+													  htonlå‡½æ•° ç”¨äºŽå°† INADDR_ANY è½¬æ¢ä¸ºç½‘ç»œå­—èŠ‚åº */
+  server_address.sin_port = htons(0);  /* æŒ‡æ´¾ä¸ºé€šé…ç«¯å£ 0ï¼Œè°ƒç”¨ bind å‡½æ•°åŽå†…æ ¸å°†ä»»æ„é€‰æ‹©ä¸€ä¸ªä¸´æ—¶ç«¯å£ */
 
   bind(sd, (struct sockaddr *) &server_address, sizeof(server_address));
 
-  /* µ÷ÓÃlisten ½«·þÎñÆ÷¶Ë socket ÃèÊö·û sd ÉèÖÃÎª±»¶¯µØ¼àÌý×´Ì¬£¬²¢ÉèÖÃ½ÓÊÜ¶ÓÁÐµÄ³¤¶ÈÎª20 */
+  /* è°ƒç”¨listen å°†æœåŠ¡å™¨ç«¯ socket æè¿°ç¬¦ sd è®¾ç½®ä¸ºè¢«åŠ¨åœ°ç›‘å¬çŠ¶æ€ï¼Œå¹¶è®¾ç½®æŽ¥å—é˜Ÿåˆ—çš„é•¿åº¦ä¸º20 */
   listen(sd, 20);
 
   /*
-    µ÷ÓÃ getsockname¡¢gethostname ºÍ gethostbyname È·¶¨±¾µØÖ÷»úÃûºÍ·þÎñÆ÷¶Ë¿ÚºÅ
+    è°ƒç”¨ getsocknameã€gethostname å’Œ gethostbyname ç¡®å®šæœ¬åœ°ä¸»æœºåå’ŒæœåŠ¡å™¨ç«¯å£å·
   */
 
   char hostname[MAXNAMELEN];
@@ -68,24 +68,24 @@ int startserver()
   myname = h->h_name;
   myport = ntohs(server_address.sin_port);
 
-  /* ÔÚ¼ÒÄ¿Â¼ÏÂ´´½¨·ûºÅÁ´½Ó'.chatport'Ö¸Ïòlinktrgt */
+  /* åœ¨å®¶ç›®å½•ä¸‹åˆ›å»ºç¬¦å·é“¾æŽ¥'.chatport'æŒ‡å‘linktrgt */
   sprintf(linktrgt, "%s:%d", myname, myport);
-  sprintf(linkname, "%s/%s", getenv("HOME"), PORTLINK); /* ÔÚÍ·ÎÄ¼þ common.h ÖÐ£º
+  sprintf(linkname, "%s/%s", getenv("HOME"), PORTLINK); /* åœ¨å¤´æ–‡ä»¶ common.h ä¸­ï¼š
 														#define PORTLINK ".chatport" */
   if (symlink(linktrgt, linkname) != 0) {
     fprintf(stderr, "error : server already exists\n");
     return(-1);
   }
 
-  /* ×¼±¸½ÓÊÜ¿Í»§¶ËÇëÇó */
+  /* å‡†å¤‡æŽ¥å—å®¢æˆ·ç«¯è¯·æ±‚ */
   printf("admin: started server on '%s' at '%d'\n",
 	 myname, myport);
   return(sd);
 }
 
 /*
-  ºÍ·þÎñÆ÷½¨Á¢Á¬½Ó£¬ÕýÈ··µ»Ø socket ÃèÊö·û£¬
-  Ê§°Ü·µ»Ø  -1
+  å’ŒæœåŠ¡å™¨å»ºç«‹è¿žæŽ¥ï¼Œæ­£ç¡®è¿”å›ž socket æè¿°ç¬¦ï¼Œ
+  å¤±è´¥è¿”å›ž  -1
 */
 int hooktoserver()
 {
@@ -97,7 +97,7 @@ int hooktoserver()
 	char *servport;
 	int bytecnt;
 
-  /* »ñÈ¡·þÎñÆ÷µØÖ· */
+  /* èŽ·å–æœåŠ¡å™¨åœ°å€ */
   sprintf(linkname, "%s/%s", getenv("HOME"), PORTLINK);
   bytecnt = readlink(linkname, linktrgt, MAXNAMELEN);
   if (bytecnt == -1) 
@@ -108,28 +108,28 @@ int hooktoserver()
 
 	linktrgt[bytecnt] = '\0';
 
-	/* »ñµÃ·þÎñÆ÷ IP µØÖ·ºÍ¶Ë¿ÚºÅ */
+	/* èŽ·å¾—æœåŠ¡å™¨ IP åœ°å€å’Œç«¯å£å· */
 	servport = index(linktrgt, ':');
 	*servport = '\0';
 	servport++;
 	servhost = linktrgt;
 
-	/* »ñµÃ·þÎñÆ÷ IP µØÖ·µÄ unsigned short ÐÎÊ½ */
+	/* èŽ·å¾—æœåŠ¡å™¨ IP åœ°å€çš„ unsigned short å½¢å¼ */
 	unsigned short number = (unsigned short) strtoul(servport, NULL, 0);
 
 	/*
-	µ÷ÓÃº¯Êý socket ´´½¨ TCP Ì×½Ó×Ö
+	è°ƒç”¨å‡½æ•° socket åˆ›å»º TCP å¥—æŽ¥å­—
 	*/
 
 	sd = socket(AF_INET, SOCK_STREAM, 0);
 	
 	/*
-	µ÷ÓÃ gethostbyname() ºÍ connect()Á¬½Ó 'servhost' µÄ 'servport' ¶Ë¿Ú
+	è°ƒç”¨ gethostbyname() å’Œ connect()è¿žæŽ¥ 'servhost' çš„ 'servport' ç«¯å£
 	*/
 	struct hostent *hostinfo;
 	struct sockaddr_in address;
 
-	hostinfo = gethostbyname(servhost); /* µÃµ½·þÎñÆ÷Ö÷»úÃû */
+	hostinfo = gethostbyname(servhost); /* å¾—åˆ°æœåŠ¡å™¨ä¸»æœºå */
 	address.sin_addr = *(struct in_addr *) *hostinfo->h_addr_list;
 	address.sin_family = AF_INET;
 	address.sin_port = htons(number);
@@ -142,13 +142,13 @@ int hooktoserver()
 		exit(1);
 	}
 
-	/* Á¬½Ó³É¹¦ */
+	/* è¿žæŽ¥æˆåŠŸ */
 	printf("admin: connected to server on '%s' at '%s'\n",
 		servhost, servport);
 	return(sd);
 }
 
-/* ´ÓÄÚºË¶ÁÈ¡Ò»¸öÌ×½Ó×ÖµÄÐÅÏ¢ */
+/* ä»Žå†…æ ¸è¯»å–ä¸€ä¸ªå¥—æŽ¥å­—çš„ä¿¡æ¯ */
 int readn(int sd, char *buf, int n)
 {
   int     toberead;
@@ -172,32 +172,32 @@ int readn(int sd, char *buf, int n)
   return(1);
 }
 
-/* ½ÓÊÕÊý¾Ý°ü */
+/* æŽ¥æ”¶æ•°æ®åŒ… */
 Packet *recvpkt(int sd)
 {
   Packet *pkt;
 
-  /* ¶¯Ì¬·ÖÅäÄÚ´æ */
+  /* åŠ¨æ€åˆ†é…å†…å­˜ */
   pkt = (Packet *) calloc(1, sizeof(Packet));
   if (!pkt) {
     fprintf(stderr, "error : unable to calloc\n");
     return(NULL);
   }
 
-  /* ¶ÁÈ¡ÏûÏ¢ÀàÐÍ */
+  /* è¯»å–æ¶ˆæ¯ç±»åž‹ */
   if (!readn(sd, (char *) &pkt->type, sizeof(pkt->type))) {
     free(pkt);
     return(NULL);
   }
 
-  /* ¶ÁÈ¡ÏûÏ¢³¤¶È */
+  /* è¯»å–æ¶ˆæ¯é•¿åº¦ */
   if (!readn(sd, (char *) &pkt->lent, sizeof(pkt->lent))) {
     free(pkt);
     return(NULL);
   }
   pkt->lent = ntohl(pkt->lent);
 
-  /* ÎªÏûÏ¢ÄÚÈÝ·ÖÅä¿Õ¼ä */
+  /* ä¸ºæ¶ˆæ¯å†…å®¹åˆ†é…ç©ºé—´ */
   if (pkt->lent > 0) {
     pkt->text = (char *) malloc(pkt->lent);
     if (!pkt) {
@@ -205,7 +205,7 @@ Packet *recvpkt(int sd)
       return(NULL);
     }
 
-    /* ¶ÁÈ¡ÏûÏ¢ÎÄ±¾ */
+    /* è¯»å–æ¶ˆæ¯æ–‡æœ¬ */
     if (!readn(sd, pkt->text, pkt->lent)) {
       freepkt(pkt);
       return(NULL);
@@ -214,25 +214,25 @@ Packet *recvpkt(int sd)
   return(pkt);
 }
 
-/* ·¢ËÍÊý¾Ý°ü */
+/* å‘é€æ•°æ®åŒ… */
 int sendpkt(int sd, char typ, long len, char *buf)
 {
   char tmp[8];
   long siz;
 
-  /* °Ñ°üµÄÀàÐÍºÍ³¤¶ÈÐ´ÈëÌ×½Ó×Ö */
+  /* æŠŠåŒ…çš„ç±»åž‹å’Œé•¿åº¦å†™å…¥å¥—æŽ¥å­— */
   bcopy(&typ, tmp, sizeof(typ));
   siz = htonl(len);
   bcopy((char *) &siz, tmp+sizeof(typ), sizeof(len));
   write(sd, tmp, sizeof(typ) + sizeof(len));
 
-  /* °ÑÏûÏ¢ÎÄ±¾Ð´ÈëÌ×½Ó×Ö */
+  /* æŠŠæ¶ˆæ¯æ–‡æœ¬å†™å…¥å¥—æŽ¥å­— */
   if (len > 0)
     write(sd, buf, len);
   return(1);
 }
 
-/* ÊÍ·ÅÊý¾Ý°üÕ¼ÓÃµÄÄÚ´æ¿Õ¼ä */
+/* é‡Šæ”¾æ•°æ®åŒ…å ç”¨çš„å†…å­˜ç©ºé—´ */
 void freepkt(Packet *pkt)
 {
   free(pkt->text);
