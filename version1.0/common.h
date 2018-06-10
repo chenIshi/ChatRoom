@@ -25,10 +25,3 @@ typedef struct _packet
     // 封包內容
     char*   txt;
 } Packet;
-
-extern int startserver();
-extern int locateserver();
-
-extern Packet *recvpkt(int sd);
-extern int sendpkt(int sd, char typm, long len, char* buf);
-extern void freepkt(Packet* msg);

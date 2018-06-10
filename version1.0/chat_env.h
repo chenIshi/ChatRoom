@@ -59,3 +59,6 @@ typedef struct _group
 
 // C語言不同行程間，訊號間的傳遞
 #include <signal.h>
+
+// 建立符號連接要用到(symlink)
+#include <unistd.h>

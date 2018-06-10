@@ -129,11 +129,97 @@ int joingroup(int socket, char* gname, char* mname)
         fprintf(stderr, "[ERROR] Unable to Calloc\n");
         cleanup();
     }
+
+    // 把新加入的成員塞到Link List的頭
     memb->name = strdup(mname);
     memb->socket = socket;
     memb->grid = grid;
     memb->prev = NULL;
+    memb->next = group[grid].mems;
 
+    // 如果聊天室已經創建好，且已經有成員了，就更新group的成員列表(反正head的prev是沒有意義的)
+    if(group[grid].mems)
+    {
+        group[grid].mems->prev = memb;
+    }
+    // 每次新增完新的成員，都把mems指到最新加入的成員上
+    group[grid].mems = memb;
+    prinf("[ADMIN] \'%s\' Has Joined \'%s\'\n", mname, gname);
+
+    // 更新聊天室在線人數
+    group[grid].occu ++;
+
+    // 終於成功發送「接受成員」的訊息了
+    sendpkt(socket, JOIN_ACCEPTED, 0, NULL);
+    return(1);
+}
+
+
+// 離開聊天室
+int leavegroup(int socket)
+{
+    Member *memb;
+
+    memb = find_member_by_socket(socket);
+    
+    // 如果找不到對應的成員ID，就不做事裝死
+    if(!memb) return(0);
+
+    // 刪除該成員node前，先把鄰居的pointer處理一下
+    if(memb->next) memb->next->prev = memb->prev;
+
+    if(group[memb->grid].mems == memb)
+    {
+        group[memb->grid].mems = memb->next;
+    }else
+    {
+        memb->prev->next = memb->next;
+    }
+
+    printf("[ADMIN] \'%s\' Left \'%s\'\n", memb->name, group[memb->grid].name);
+
+    group[memb->grid].occu --;
+
+    // 真正釋放該成員的記憶體空間
+    free(memb->name);
+    free(memb);
+    return(1);
+}
+
+int relaymsg(int socket, char* text)
+{
+    Member* memb;
+    Member* sender;
+    char pktbufr[MAXNAMELEN];
+    char* bufrptr;
+    long bufrlen;
+
+    // 根據socket找到對應的用戶資訊
+    sender = find_member_by_socket(socket);
+
+    // 找不到送訊息的人
+    if(!sender)
+    {
+        fprintf(stderr, "strange: no corresponding member at %d\n", socket);
+        return(0);
+    }
+
+    // 把發送者的姓名塞到封包前面
+    bufrptr = pktbufr;
+    strcpy(bufrptr, sender->name);
+    bufrptr += strlen(bufrptr) + 1;
+    strcpy(bufrptr, text);
+    bufrptr += strlen(bufrptr) + 1;
+    bufrlen = bufrptr - pktbufr;
+
+    // 廣播該訊息給所有人
+    for(memb = group[sender->grid].mems; memb; memb = memb->next)
+    {
+        // 發送者自己不用收到訊息（原文是這樣寫，不過我覺得至少要知會源發送者訊息已被送出）
+        sendpkt(memb->socket, USER_TXT, bufrlen, pktbufr);
+    }
+    printf("%s: %s", sender->name, text);
+    return(1);
 }
 
 // 如果有找到就回傳該index，沒有找到則回傳一個-1
